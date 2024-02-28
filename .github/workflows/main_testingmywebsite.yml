@@ -22,8 +22,8 @@ jobs:
           dotnet-version: '8.x'
           include-prerelease: true
 
-      - name: Build 
-        run: dotnet build src/Tests/Tests.csproj
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
@@ -40,13 +40,22 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    
+    permissions:
+      id-token: write #This is required for requesting the JWT
+
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: .net-app
       
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_A558A00408F1466EAB71907D8AC1F976 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_478482E9D69E4EB49AC5C38EAE33D0C2 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_9C03FD4C7A6F4580BD92958AD98AF536 }}
+
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
@@ -54,4 +63,4 @@ jobs:
           app-name: 'testingmywebsite'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4BAA0C822D9C4FD98ABE3F595756C524 }}
+          
