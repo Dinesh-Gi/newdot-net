@@ -22,7 +22,7 @@ jobs:
           dotnet-version: '8.x'
           include-prerelease: true
 
-      - name: Build with dotnet
+      - name: Build 
         run: dotnet build --configuration Release
 
       - name: dotnet publish
@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'testingmywebsite'
           slot-name: 'Production'
-          package: src/Tests
+          package: 'src/Tests'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4BAA0C822D9C4FD98ABE3F595756C524 }}
