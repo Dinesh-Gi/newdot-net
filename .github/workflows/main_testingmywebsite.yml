@@ -23,7 +23,7 @@ jobs:
           include-prerelease: true
 
       - name: Build 
-        run: dotnet build --configuration Release
+        run: dotnet build src/File
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'testingmywebsite'
           slot-name: 'Production'
-          package: src/File
+          package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4BAA0C822D9C4FD98ABE3F595756C524 }}
